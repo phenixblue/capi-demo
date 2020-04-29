@@ -1,0 +1,10 @@
+**/ssl
+**/*.crt
+**/*.key
+**/*.pem
+**/*-patched.yaml
+**/*env
+**/.ssh
+**/*.kubeconfig
+**/azure-cluster*.yaml
+**/aws-cluster*.yaml
