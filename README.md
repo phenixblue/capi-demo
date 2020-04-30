@@ -1,6 +1,10 @@
 # Cluster API Demo Notes
 
-## Setup local kind cluster to help bootstrap
+There are many prereqs for this demo. I try to call them all out, but please reference the CAPI docs for the most up to date info
+
+https://cluster-api.sigs.k8s.io/user/quick-start.html
+
+## Setup local kind cluster to use as Management Cluster
 
 ```
 $ cd ~/demo/capi-demo/
@@ -17,13 +21,15 @@ $ clusterctl init
 $ kubectl get pods -A | grep capi
 ```
 
-## Install AWS Infrastructure Provider
+## Install AWS Workload Cluster
 
 ### Source ENV Vars for AWS
 
 ```
 $ source ./aws/.env
 ```
+
+NOTE: More info on what's required is located here: https://github.com/kubernetes-sigs/cluster-api-provider-aws/blob/master/docs/prerequisites.md
 
 ### Setup AWS IAM stuff
 
@@ -145,13 +151,15 @@ NOTE: Change version from 1.17.3 to 1.17.5
 
 ---
 
-## Install Azure Infrastructure Provider
+## Install Azure Workload Cluster
 
 ### Source ENV Vars for Azure
 
 ```
 $ source ./azure/.env
 ```
+
+NOTE: More info on what's required is located here: https://github.com/kubernetes-sigs/cluster-api-provider-azure/blob/master/docs/getting-started.md#prerequisites
 
 ### Init Azure Infrastructure Provider
 
@@ -224,4 +232,35 @@ $ cd ./azure/cluster1
 $ kubectl apply -f ../../sample-apps/httpbin-deploy.yaml
 $ kubectl get pods
 $ kubectl get pods -A
+```
+
+---
+
+#############################
+
+
+## Things to show:
+
+All commands to be run on management cluster
+
+### Show general CAPI primitives
+```
+$ kubectl get pods -A
+$ kubectl get clusters -A
+$ kubectl get machines -A
+$ kubectl get md -A
+$ kubectl get kcp -A
+```
+
+### Show scaling and watch controller logs
+
+```
+$ kubectl scale md -n aws-clusters aws-cluster1-md-0 --replicas 3
+$ kubectl logs -n capa-system -l control-plane=capa-controller-manager -c manager -f
+```
+
+### Show Worker Node Upgrade
+
+```
+$ kubectl edit md -n azure-clusters azure-cluster1-md-0
 ```
